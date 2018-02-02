@@ -15,6 +15,25 @@
 			connection = DriverManager.getConnection(connectionURL, "root", "");
 			if(!connection.isClosed())
 				 out.println("Successfully connected to " + "MySQL server using TCP/IP...");
+			 
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			String query = "SELECT * from utenti WHERE utente = '" + username + "' AND password = '" + password + "'";
+			Statement stmt = null;
+			
+			try {
+					stmt = connection.createStatement();
+					ResultSet rs = stmt.executeQuery(query);
+					rs.beforeFirst();
+					
+					if (!rs.next())
+						out.println("NON TROVATO");
+					else
+						out.println("TROVATO");
+				} catch (SQLException e ) {
+				} finally {
+					if (stmt != null) { stmt.close(); }
+				}
 			connection.close();
 		}catch(Exception ex){
 			out.println("Unable to connect to database.");
