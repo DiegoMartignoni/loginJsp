@@ -32,7 +32,7 @@
       						session.setAttribute("username",username);
                   session.setAttribute("password",password);
                   session.setAttribute("ruolo",rs.getInt("idRuolo"));
-      						response.sendRedirect("Home.jsp");
+      						response.sendRedirect("index.jsp");
       				} catch (SQLException e ) {
       				} finally {
       					if (stmt != null) { stmt.close(); }
