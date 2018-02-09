@@ -27,11 +27,10 @@
 					rs.beforeFirst();
 
 					if (!rs.next())
-						out.println("NON TROVATO");
+						response.sendRedirect("Error.jsp");
 					else
 						session.setAttribute("username",username);
 						response.sendRedirect("Home.jsp");
-						out.println("TROVATO");
 				} catch (SQLException e ) {
 				} finally {
 					if (stmt != null) { stmt.close(); }
