@@ -9,12 +9,13 @@
         <div class="align-self-center">
           <h1>
             <%
-            String a=session.getAttribute("username").toString();
-            out.println("Hello  "+a);
+            String nome=session.getAttribute("username").toString();
+            out.println("Benvenuto "+ nome);
             %>
           </h1>
-          <a href="Logout.jsp" class="btn btn-danger">Logout</a>
+          <a href="Logout.jsp" class="btn btn-danger">Esci</a>
         </div>
       </div>
+      <%@ include file="script.html" %>
     </body>
 </html>
