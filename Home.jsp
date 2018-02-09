@@ -1,23 +1,20 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" errorPage="Error.jsp"%>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>       
-        <br/><br/><br/><br/><br/>
-        <center>
-            <h2>
+<html class="w-100 h-100">
+  <jsp:include page="header.jsp" >
+    <jsp:param name="titolo" value="Benvenuto" />
+  </jsp:include>
+    <body>
+      <body class="w-100 h-100">
+      <div class="d-flex justify-content-center w-100 h-100">
+        <div class="align-self-center">
+          <h1>
             <%
             String a=session.getAttribute("username").toString();
             out.println("Hello  "+a);
             %>
-            </h2>
-            <br/>
-            <br/>
-            <br/><br/><br/><br/><br/>
-        <a href="Logout.jsp">Logout</a>
-        </center>
-
+          </h1>
+          <a href="Logout.jsp" class="btn btn-danger">Logout</a>
+        </div>
+      </div>
     </body>
 </html>
