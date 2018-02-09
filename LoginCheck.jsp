@@ -8,39 +8,39 @@
     </head>
     <body>
         <%
-		try {
-			String connectionURL = "jdbc:mysql://localhost:3306/loginJsp";
-			Connection connection = null;
-			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			connection = DriverManager.getConnection(connectionURL, "root", "");
-			if(!connection.isClosed())
-				 out.println("Successfully connected to " + "MySQL server using TCP/IP...");
+      		try {
+      			String connectionURL = "jdbc:mysql://localhost:3306/loginJsp";
+      			Connection connection = null;
+      			Class.forName("com.mysql.jdbc.Driver").newInstance();
+      			connection = DriverManager.getConnection(connectionURL, "root", "");
+      			if(!connection.isClosed())
+      				 out.println("Successfully connected to " + "MySQL server using TCP/IP...");
 
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String query = "SELECT * from utenti WHERE utente = '" + username + "' AND password = '" + password + "'";
-			Statement stmt = null;
+      			String username = request.getParameter("username");
+      			String password = request.getParameter("password");
+      			String query = "SELECT * from utenti WHERE utente = '" + username + "' AND password = '" + password + "'";
+      			Statement stmt = null;
 
-			try {
-					stmt = connection.createStatement();
-					ResultSet rs = stmt.executeQuery(query);
-					rs.beforeFirst();
+      			try {
+      					stmt = connection.createStatement();
+      					ResultSet rs = stmt.executeQuery(query);
+      					rs.beforeFirst();
 
-					if (!rs.next())
-						response.sendRedirect("Error.jsp");
-					else
-						session.setAttribute("username",username);
-            session.setAttribute("password",password);
-            session.setAttribute("ruolo",rs.getInt("idRuolo"));
-						response.sendRedirect("Home.jsp");
-				} catch (SQLException e ) {
-				} finally {
-					if (stmt != null) { stmt.close(); }
-				}
-			connection.close();
-		}catch(Exception ex){
-			out.println("Unable to connect to database.");
-		}
+      					if (!rs.next())
+      						response.sendRedirect("Error.jsp");
+      					else
+      						session.setAttribute("username",username);
+                  session.setAttribute("password",password);
+                  session.setAttribute("ruolo",rs.getInt("idRuolo"));
+      						response.sendRedirect("Home.jsp");
+      				} catch (SQLException e ) {
+      				} finally {
+      					if (stmt != null) { stmt.close(); }
+      				}
+      			connection.close();
+      		}catch(Exception ex){
+      			out.println("Unable to connect to database.");
+      		}
 
         %>
     </body>
