@@ -4,9 +4,36 @@
 <%@ page session="true" %>
 <%
   HttpSession session2 = request.getSession();
+  String ruolo = "";
+  if(null!=session2.getAttribute("username")){
+    try {
+      String connectionURL = "jdbc:mysql://localhost:3306/loginJsp";
+      Connection connection = null;
+      Class.forName("com.mysql.jdbc.Driver").newInstance();
+      connection = DriverManager.getConnection(connectionURL, "root", "");
 
-  if(null!=session2.getAttribute("username")){ %>
+      String query = "SELECT ruolo from ruoli WHERE idRuolo = '" + session.getAttribute("ruolo").toString() +"'";
+      Statement stmt = null;
 
+      try {
+          stmt = connection.createStatement();
+          ResultSet rs = stmt.executeQuery(query);
+          rs.beforeFirst();
+
+          if (!rs.next())
+            response.sendRedirect("Error.jsp");
+          else
+            ruolo = "<strong>Ruolo: </strong> " + rs.getString("ruolo").toString();
+
+        } catch (SQLException e ) {
+        } finally {
+          if (stmt != null) { stmt.close(); }
+        }
+      connection.close();
+    }catch(Exception ex){
+      out.println("Unable to connect to database.");
+    }
+%>
 
 <html class="w-100 h-100">
   <jsp:include page="header.jsp" >
@@ -23,33 +50,7 @@
             %>
           </h1>
           <h1 class="btn btn-secondary mb-0">
-            <%
-              try {
-                String connectionURL = "jdbc:mysql://localhost:3306/loginJsp";
-                Connection connection = null;
-                Class.forName("com.mysql.jdbc.Driver").newInstance();
-                connection = DriverManager.getConnection(connectionURL, "root", "");
-
-                String query = "SELECT ruolo from ruoli WHERE idRuolo = '" + session.getAttribute("ruolo").toString() +"'";
-                Statement stmt = null;
-
-                try {
-                    stmt = connection.createStatement();
-                    ResultSet rs = stmt.executeQuery(query);
-                    rs.beforeFirst();
-
-                    if (!rs.next())
-                      response.sendRedirect("Error.jsp");
-                    else
-                      out.println("<strong>Ruolo: </strong>" + rs.getString("ruolo") + "");
-                  } catch (SQLException e ) {
-                  } finally {
-                    if (stmt != null) { stmt.close(); }
-                  }
-                connection.close();
-              }catch(Exception ex){
-                out.println("Unable to connect to database.");
-              }  %>
+            <% out.println(ruolo); %>
           </h1>
           <a href="Logout.jsp" class="btn btn-danger">Esci</a>
         </div>
