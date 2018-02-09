@@ -9,6 +9,7 @@
           <%
           session.removeAttribute("username");
           session.removeAttribute("password");
+          session.removeAttribute("ruolo");
           session.invalidate();
           %>
           <h1>Disconnessione eseguita.</h1>

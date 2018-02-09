@@ -30,6 +30,8 @@
 						response.sendRedirect("Error.jsp");
 					else
 						session.setAttribute("username",username);
+            session.setAttribute("password",password);
+            session.setAttribute("ruolo",rs.getInt("idRuolo"));
 						response.sendRedirect("Home.jsp");
 				} catch (SQLException e ) {
 				} finally {
