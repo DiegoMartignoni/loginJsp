@@ -33,7 +33,7 @@
           if (stmt != null) { stmt.close(); }
         }
 
-        query = "SELECT utenti.utente, ruoli.ruolo FROM utenti INNER JOIN ruoli ON utenti.idRuolo=ruoli.idRuolo;";
+        query = "SELECT utenti.utente, ruoli.ruolo FROM utenti INNER JOIN ruoli ON utenti.idRuolo=ruoli.idRuolo AND utenti.idRuolo > '"+ session.getAttribute("ruolo").toString() +"';";
         try {
           stmt = connection.createStatement();
           ResultSet rs2 = stmt.executeQuery(query);
