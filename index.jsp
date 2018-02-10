@@ -5,6 +5,8 @@
 <%
   HttpSession session2 = request.getSession();
   String ruolo = "";
+  int idruolo = "";
+  String nome = "";
   if(null!=session2.getAttribute("username")){
     try {
       String connectionURL = "jdbc:mysql://localhost:3306/loginJsp";
@@ -29,6 +31,24 @@
         } finally {
           if (stmt != null) { stmt.close(); }
         }
+
+        String query = "SELECT utente, ruolo FORM utenti";
+        try {
+            stmt = connection.createStatement();
+            ResultSet rs2 = stmt.executeQuery(query);
+            rs2.beforeFirst();
+
+            if (!rs2.next())
+              response.sendRedirect("Error.jsp");
+            else
+              nome = rs.getString("utente").toString();
+
+          } catch (SQLException e ) {
+          } finally {
+            if (stmt != null) { stmt.close(); }
+          }
+
+
       connection.close();
     }catch(Exception ex){
       out.println("Unable to connect to database.");
@@ -42,7 +62,7 @@
     <body>
       <body class="w-100 h-100 text-center">
       <div class="d-flex justify-content-center w-100 h-100">
-        <div class="align-self-center">
+        <div class="align-self-center jumbotron">
           <h1>
             <%
             String nome=session.getAttribute("username").toString();
@@ -53,6 +73,7 @@
             <% out.println(ruolo); %>
           </h1>
           <a href="Logout.jsp" class="btn btn-danger">Esci</a>
+          <%@ include file="tabella.jsp" %>
         </div>
       </div>
       <%@ include file="script.html" %>
