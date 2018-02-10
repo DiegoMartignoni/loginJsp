@@ -6,6 +6,8 @@
 <%
   HttpSession session2 = request.getSession();
   String ruolo = "";
+  int[] idnomeUtente = new int[20];
+  int y = 0;
   Vector<String> nomeUtente = new Vector<String>();
   Vector<String> ruoloUtente = new Vector<String>();
   if(null!=session2.getAttribute("username")){
@@ -33,10 +35,29 @@
           if (stmt != null) { stmt.close(); }
         }
 
+        if(request.getParameter("elimina")!=null){
+          out.println("fatto");
+          query = "DELETE FROM utenti WHERE idUtente = "+ request.getParameter("elimina").toString();
+          out.println(query);
+          try {
+            stmt = connection.createStatement();
+            ResultSet rs3 = stmt.executeQuery(query);
+            out.println("fatto");
+            rs3.beforeFirst();
+            if (!rs3.next())
+              out.println("fine");
+          } catch (SQLException e ) {
+          } finally {
+            if (stmt != null) { stmt.close(); }
+          }
+        }
+
+
+
         String limite = session.getAttribute("ruolo").toString();
         if(limite.equals("4"))
           limite = "3";
-        query = "SELECT utenti.utente, ruoli.ruolo FROM utenti INNER JOIN ruoli ON utenti.idRuolo=ruoli.idRuolo AND utenti.idRuolo > '"+ limite +"';";
+        query = "SELECT utenti.idUtente, utenti.utente, ruoli.ruolo FROM utenti INNER JOIN ruoli ON utenti.idRuolo=ruoli.idRuolo AND utenti.idRuolo > '"+ limite +"' ORDER BY utenti.idRuolo;";
 
         try {
           stmt = connection.createStatement();
@@ -46,6 +67,8 @@
           while (rs2.next()){
             nomeUtente.addElement(rs2.getString("utente"));
             ruoloUtente.addElement(rs2.getString("ruolo"));
+            idnomeUtente[y] = rs2.getInt("idUtente");
+            y++;
           }
         } catch (SQLException e ) {
         } finally {
@@ -82,7 +105,7 @@
           <table class="table table-striped mt-3">
             <thead>
               <tr class="bg-primary text-white rounded">
-                <th scope="col">#</th>
+                <th scope="col">id</th>
                 <th scope="col">Utente</th>
                 <th scope="col">Ruolo</th>
                 <%
@@ -94,14 +117,14 @@
             </thead>
             <tbody>
               <%
-              int i = 1;
+              y = 0;
               Enumeration n = nomeUtente.elements();
               Enumeration r = ruoloUtente.elements();
               while(n.hasMoreElements()){
               %>
 
               <tr>
-                <th scope="row"><% out.print(i++); %></th>
+                <th scope="row"><% out.print(idnomeUtente[y]); %></th>
                 <td><% out.print(n.nextElement()); %></td>
                 <td><% out.print(r.nextElement()); %></td>
 
@@ -111,7 +134,7 @@
                 <% } %>
 
               </tr>
-              <% } %>
+              <% y++; } %>
             </tbody>
           </table>
 
