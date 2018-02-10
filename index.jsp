@@ -5,8 +5,9 @@
 <%
   HttpSession session2 = request.getSession();
   String ruolo = "";
-  int idruolo = "";
-  String nome = "";
+  String[] idruolo = new String[50];
+  int i = 0;
+  String[] nome = new String[50];
   if(null!=session2.getAttribute("username")){
     try {
       String connectionURL = "jdbc:mysql://localhost:3306/loginJsp";
@@ -32,16 +33,18 @@
           if (stmt != null) { stmt.close(); }
         }
 
-        String query = "SELECT utente, ruolo FORM utenti";
+        query = "SELECT utente, ruolo FORM utenti";
         try {
             stmt = connection.createStatement();
             ResultSet rs2 = stmt.executeQuery(query);
             rs2.beforeFirst();
 
-            if (!rs2.next())
-              response.sendRedirect("Error.jsp");
-            else
-              nome = rs.getString("utente").toString();
+            while (!rs2.next()){
+              nome[i] = rs.getString("utente").toString();
+              idruolo[i] = rs.getInt("idRuolo").toString();
+              i++;
+            }
+            i=0;
 
           } catch (SQLException e ) {
           } finally {
