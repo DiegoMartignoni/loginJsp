@@ -33,7 +33,11 @@
           if (stmt != null) { stmt.close(); }
         }
 
-        query = "SELECT utenti.utente, ruoli.ruolo FROM utenti INNER JOIN ruoli ON utenti.idRuolo=ruoli.idRuolo AND utenti.idRuolo > '"+ session.getAttribute("ruolo").toString() +"';";
+        String limite = session.getAttribute("ruolo").toString();
+        if(limite.equals("4"))
+          limite = "3";
+        query = "SELECT utenti.utente, ruoli.ruolo FROM utenti INNER JOIN ruoli ON utenti.idRuolo=ruoli.idRuolo AND utenti.idRuolo > '"+ limite +"';";
+
         try {
           stmt = connection.createStatement();
           ResultSet rs2 = stmt.executeQuery(query);
