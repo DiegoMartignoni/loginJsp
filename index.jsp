@@ -1,13 +1,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" errorPage="Error.jsp"%>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.io.*" %>
+<%@ page import="java.util.*" %>
 <%@ page session="true" %>
 <%
   HttpSession session2 = request.getSession();
   String ruolo = "";
-  String[] idruolo = new String[50];
-  int i = 0;
-  String[] nome = new String[50];
+  Vector<String> nomeUtente = new Vector<String>();
+  Vector<String> ruoloUtente = new Vector<String>();
   if(null!=session2.getAttribute("username")){
     try {
       String connectionURL = "jdbc:mysql://localhost:3306/loginJsp";
@@ -33,26 +33,23 @@
           if (stmt != null) { stmt.close(); }
         }
 
-        query = "SELECT utente, ruolo FORM utenti";
+        query = "SELECT utenti.utente, ruoli.ruolo FROM utenti INNER JOIN ruoli ON utenti.idRuolo=ruoli.idRuolo;";
         try {
-            stmt = connection.createStatement();
-            ResultSet rs2 = stmt.executeQuery(query);
-            rs2.beforeFirst();
+          stmt = connection.createStatement();
+          ResultSet rs2 = stmt.executeQuery(query);
+          rs2.beforeFirst();
 
-            while (!rs2.next()){
-              nome[i] = rs.getString("utente").toString();
-              idruolo[i] = rs.getInt("idRuolo").toString();
-              i++;
-            }
-            i=0;
-
-          } catch (SQLException e ) {
-          } finally {
-            if (stmt != null) { stmt.close(); }
+          while (rs2.next()){
+            nomeUtente.addElement(rs2.getString("utente"));
+            ruoloUtente.addElement(rs2.getString("ruolo"));
           }
+        } catch (SQLException e ) {
+        } finally {
+          if (stmt != null) { stmt.close(); }
+        }
+        connection.close();
 
 
-      connection.close();
     }catch(Exception ex){
       out.println("Unable to connect to database.");
     }
@@ -76,7 +73,46 @@
             <% out.println(ruolo); %>
           </h1>
           <a href="Logout.jsp" class="btn btn-danger">Esci</a>
-          <%@ include file="tabella.jsp" %>
+
+
+          <table class="table table-striped mt-3">
+            <thead>
+              <tr class="bg-primary text-white rounded">
+                <th scope="col">#</th>
+                <th scope="col">Utente</th>
+                <th scope="col">Ruolo</th>
+                <%
+                  if(session.getAttribute("ruolo").equals(1)){
+                    out.println("<th scope='col'>Operazioni</th>");
+                  }
+                %>
+              </tr>
+            </thead>
+            <tbody>
+              <%
+              int i = 1;
+              Enumeration n = nomeUtente.elements();
+              Enumeration r = ruoloUtente.elements();
+              while(n.hasMoreElements()){
+              %>
+
+              <tr>
+                <th scope="row"><% out.print(i++); %></th>
+                <td><% out.print(n.nextElement()); %></td>
+                <td><% out.print(r.nextElement()); %></td>
+
+                <% if(session.getAttribute("ruolo").equals(1)){
+                %>
+                <td><a href="index.jsp" class="btn btn-danger">Elimina</a></td>
+                <% } %>
+
+              </tr>
+              <% } %>
+            </tbody>
+          </table>
+
+
+
         </div>
       </div>
       <%@ include file="script.html" %>
