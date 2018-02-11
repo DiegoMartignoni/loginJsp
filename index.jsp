@@ -35,24 +35,6 @@
           if (stmt != null) { stmt.close(); }
         }
 
-        if(request.getParameter("elimina")!=null){
-          out.println("fatto");
-          query = "DELETE FROM utenti WHERE idUtente = "+ request.getParameter("elimina").toString();
-          out.println(query);
-          try {
-            stmt = connection.createStatement();
-            ResultSet rs3 = stmt.executeQuery(query);
-            out.println("fatto");
-            rs3.beforeFirst();
-            if (!rs3.next())
-              out.println("fine");
-          } catch (SQLException e ) {
-          } finally {
-            if (stmt != null) { stmt.close(); }
-          }
-        }
-
-
 
         String limite = session.getAttribute("ruolo").toString();
         if(limite.equals("4"))
@@ -129,8 +111,11 @@
                 <td><% out.print(r.nextElement()); %></td>
 
                 <% if(session.getAttribute("ruolo").equals(1)){
-                %>
-                <td><a href="index.jsp" class="btn btn-danger">Elimina</a></td>
+                %><td>
+                <form action='elimina.jsp' method="post">
+                    <input type='submit' value='Elimina' class="btn btn-danger">
+                    <input type="hidden" name="elimina" value="<%out.print(idnomeUtente[y]);%>">
+                </form></td>
                 <% } %>
 
               </tr>
