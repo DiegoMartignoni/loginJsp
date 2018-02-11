@@ -112,7 +112,7 @@
 
                 <% if(session.getAttribute("ruolo").equals(1)){
                 %><td>
-                <form action='elimina.jsp' method="post">
+                <form action='elimina.jsp' method="post" class="mb-0">
                     <input type='submit' value='Elimina' class="btn btn-danger">
                     <input type="hidden" name="elimina" value="<%out.print(idnomeUtente[y]);%>">
                 </form></td>
